@@ -1,4 +1,5 @@
 job1:
   script:
-    - curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+    - curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
+    - export PATH=$PATH:~/yandex-cloud/bin
     - yc -v
