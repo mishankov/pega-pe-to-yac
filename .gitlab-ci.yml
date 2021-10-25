@@ -6,3 +6,8 @@ job1:
     - yc --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID compute instance list
     - ssh-keygen -b 2048 -t rsa -f sshkey -q -N ""
     - ls
+  artifacts:
+    paths:
+      - sshkey
+      - sshkey.pub
+    expire_in: 1 week
