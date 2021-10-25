@@ -17,7 +17,7 @@ job1:
      --public-ip 
      --create-boot-disk size=20G,image-folder-id=standard-images,image-family=centos-8 
      --preemptible 
-     --memory 8589934592
+     --memory "8589934592"
      --cores 2
      --core-fraction 20
      --ssh-key sshkey.pub
