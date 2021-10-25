@@ -3,7 +3,9 @@ job1:
     - curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
     - export PATH=$PATH:~/yandex-cloud/bin
     - yc -v
+    - yc config set compute-default-zone ru-central1-b
     - yc --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID compute instance list
+    - yc config list
     - ssh-keygen -b 2048 -t rsa -f sshkey -q -N ""
     - ls
   artifacts:
