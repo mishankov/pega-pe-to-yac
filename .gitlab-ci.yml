@@ -1,5 +1,4 @@
 job1:
-  script: "curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash"
-
-job2:
-  script: "yc -v"
+  script:
+    - curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+    - yc -v
