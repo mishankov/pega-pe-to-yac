@@ -4,14 +4,20 @@ job1:
     - export PATH=$PATH:~/yandex-cloud/bin
     - yc -v
     - yc config set compute-default-zone ru-central1-b
-    - yc \
-      --token $YC_TOKEN \
-      --cloud-id $YC_CLOUD_ID \
-      --folder-id $YC_FOLDER_ID \
-      compute instance list
+    - yc --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID compute instance list
     - yc config list
     - ssh-keygen -b 2048 -t rsa -f sshkey -q -N ""
     - ls
+    - >
+     yc 
+     --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
+     compute instance create 
+     --name first-instance 
+     --zone ru-central1-a 
+     --network-interface subnet-name=default-a,nat-ip-version=ipv4 
+     --create-boot-disk image-folder-id=standard-images,image-family=centos-8 
+     --ssh-key sshkey.pub
+    - yc --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID compute instance list
   artifacts:
     paths:
       - sshkey
