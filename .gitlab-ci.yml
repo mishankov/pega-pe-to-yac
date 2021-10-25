@@ -1,28 +1,33 @@
-# This file is a template, and might need editing before it works on your project.
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Terraform.gitlab-ci.yml
+image: busybox:latest
 
-include:
-  - template: Terraform/Base.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.latest.gitlab-ci.yml
+before_script:
+  - curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+  - echo "Before script section"
+  - echo "For example you might run an update here or install a build dependency"
+  - echo "Or perhaps you might print out some debugging details"
 
-stages:
-  - init
-  - validate
-  - build
-  - deploy
+after_script:
+  - echo "After script section"
+  - echo "For example you might do some cleanup here"
 
-init:
-  extends: .init
+build1:
+  stage: build
+  script:
+    - echo "Do your build here"
 
-validate:
-  extends: .validate
+test1:
+  stage: test
+  script:
+    - echo "Do a test here"
+    - echo "For example run a test suite"
 
-build:
-  extends: .build
+test2:
+  stage: test
+  script:
+    - echo "Do another parallel test here"
+    - echo "For example run a lint test"
 
-deploy:
-  extends: .deploy
-  dependencies:
-    - build
+deploy1:
+  stage: deploy
+  script:
+    - echo "Do your deploy here"
