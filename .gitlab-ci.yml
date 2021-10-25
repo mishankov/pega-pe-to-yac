@@ -14,7 +14,7 @@ job1:
      compute instance create 
      --name first-instance 
      --zone ru-central1-a 
-     --network-interface subnet-name=default-a,nat-ip-version=ipv4 
+     --network-interface subnet-name=default,nat-ip-version=ipv4 
      --create-boot-disk image-folder-id=standard-images,image-family=centos-8 
      --ssh-key sshkey.pub
     - yc --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID compute instance list
