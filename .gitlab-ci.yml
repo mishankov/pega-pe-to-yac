@@ -1,5 +1,5 @@
 cache:
-    key: "GLOBAL_CACHE"
+  - key: "GLOBAL_CACHE"
     paths:
       - cache/
       - yandex-cloud/
@@ -22,6 +22,7 @@ curlyc:
 keygen:
   stage: keygen
   script:
+    - mkdir -p cache
     - ssh-keygen -b 2048 -t rsa -f cache/sshkey -q -N ""
   rules:
     - exists:
