@@ -5,7 +5,12 @@ cache:
     paths:
       - cache/
 
-job1:
+stages:
+  - newvm
+  - vmconfig
+
+newvm:
+  stage: newvm
   script:
     - curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
     - export PATH=$PATH:~/yandex-cloud/bin
@@ -25,7 +30,7 @@ job1:
      --preemptible 
      --core-fraction 20 
      --memory 6 
-     --ssh-key $SSH_KEY 
+     --ssh-key $SSH_KEY.pub 
     - >
      yc 
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
@@ -33,9 +38,24 @@ job1:
     - >
      yc 
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
-     compute instance get first-instance
+     compute instance get first-instance | grep -v "address: 10"  | grep " address:" | tr -d ' address:' > cache/addr
   artifacts:
     paths:
       - cache/sshkey
       - cache/sshkey.pub
     expire_in: 1 week
+  rules:
+    - when: never
+
+vmconfig:
+  stage: vmconfig
+  script:
+    - uname -a
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - cat $SSH_KEY | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
+    - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@62.84.119.228  < /tmp/shell.sh
+    #- ssh -t -t yc-user@'cat cache/addr'  < /tmp/shell.sh
