@@ -17,8 +17,9 @@ job1:
      --public-ip 
      --create-boot-disk size=20G,image-folder-id=standard-images,image-family=centos-8 
      --preemptible 
-     --core-fraction 20
-     --ssh-key sshkey.pub
+     --core-fraction 20 
+     --memory 6 
+     --ssh-key sshkey.pub 
     - >
      yc 
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
