@@ -24,7 +24,7 @@ keygen:
   stage: keygen
   script:
     - mkdir -p cache
-    - ssh-keygen -b 2048 -t rsa -f cache/sshkey -q -N ""
+    - "[ ! -f cache/sshkey ] || ssh-keygen -b 2048 -t rsa -f cache/sshkey -q -N \"\""
   rules:
     - exists:
       - cache/sshkey
