@@ -45,7 +45,8 @@ newvm:
       - cache/sshkey.pub
     expire_in: 1 week
   rules:
-    - when: always
+    #- when: always
+    - when: never
 
 vmconfig:
   stage: vmconfig
@@ -58,5 +59,4 @@ vmconfig:
     - chmod 700 ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
     #- ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@62.84.119.228  < remote-script.sh
-    - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@'cat cache/addr' < remote-script.sh
-    #- ssh -t -t yc-user@'cat cache/addr'  < /tmp/shell.sh
+    - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < remote-script.sh
