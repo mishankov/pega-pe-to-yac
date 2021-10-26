@@ -8,8 +8,7 @@ job1:
   script:
     - curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
   rules:
-    - if:
-      exists: yandex-cloud/bin/yc
+    - exists: yandex-cloud/bin/yc
       when: never
     - when: always
 
@@ -17,8 +16,7 @@ job2:
   script:
     - ssh-keygen -b 2048 -t rsa -f cache/sshkey -q -N ""
   rules:
-    - if:
-      exists: cache/sshkey
+    - exists: cache/sshkey
       when: never
     - when: always
 
