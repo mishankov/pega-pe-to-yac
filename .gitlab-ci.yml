@@ -1,43 +1,21 @@
+variables:
+  SSH_KEY: cache/sshkey
 cache:
   - key: "GLOBAL_CACHE"
     paths:
       - cache/
-      - yandex-cloud/
 
-stages:
-  - curlyc
-  - keygen
-  - newvm
-
-curlyc:
-  stage: curlyc
+job1:
   script:
     - curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
-    - ln -sf ~/yandex-cloud yandex-cloud
-  rules:
-    - exists: 
-      - yandex-cloud/bin/yc
-      when: never
-    - when: always
-
-keygen:
-  stage: keygen
-  script:
-    - mkdir -p cache
-    - "[ -f cache/sshkey ] || ssh-keygen -b 2048 -t rsa -f cache/sshkey -q -N \"\""
-  rules:
-    - exists:
-      - cache/sshkey
-      when: never
-    - when: always
-
-newvm:
-  stage: newvm
-  script:
-    - export PATH=$PATH:./yandex-cloud/bin
+    - export PATH=$PATH:~/yandex-cloud/bin
     - yc -v
-    - yc config set compute-default-zone ru-central1-b #не используется
+    - yc config set compute-default-zone ru-central1-b
     - yc --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID compute instance list
+    - yc config list
+    - mkdir -p cache
+    - "[ -f $SSH_KEY ] || ssh-keygen -b 2048 -t rsa -f $SSH_KEY -q -N \"\""
+    - ls
     - >
      yc 
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
@@ -49,7 +27,7 @@ newvm:
      --preemptible 
      --core-fraction 20 
      --memory 6 
-     --ssh-key sshkey.pub 
+     --ssh-key $SSH_KEY 
     - >
      yc 
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
