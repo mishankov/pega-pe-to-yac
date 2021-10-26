@@ -12,10 +12,8 @@ job1:
     - yc -v
     - yc config set compute-default-zone ru-central1-b
     - yc --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID compute instance list
-    - yc config list
     - mkdir -p cache
     - "[ -f $SSH_KEY ] || ssh-keygen -b 2048 -t rsa -f $SSH_KEY -q -N \"\""
-    - ls
     - >
      yc 
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
