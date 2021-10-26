@@ -13,6 +13,7 @@ curlyc:
   stage: curlyc
   script:
     - curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
+    - ln -sf ~/yandex-cloud yandex-cloud
   rules:
     - exists: 
       - yandex-cloud/bin/yc
@@ -33,7 +34,7 @@ keygen:
 newvm:
   stage: newvm
   script:
-    - export PATH=$PATH:~/yandex-cloud/bin
+    - export PATH=$PATH:./yandex-cloud/bin
     - yc -v
     - yc config set compute-default-zone ru-central1-b #не используется
     - yc --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID compute instance list
