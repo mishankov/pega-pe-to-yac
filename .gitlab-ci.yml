@@ -1,28 +1,41 @@
-# This file is a template, and might need editing before it works on your project.
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Terraform.gitlab-ci.yml
+variables:
+  SSH_KEY: cache/sshkey
+cache:
+  - key: "GLOBAL_CACHE"
+    paths:
+      - cache/
 
-include:
-  - template: Terraform/Base.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Terraform/Base.latest.gitlab-ci.yml
-
-stages:
-  - init
-  - validate
-  - build
-  - deploy
-
-init:
-  extends: .init
-
-validate:
-  extends: .validate
-
-build:
-  extends: .build
-
-deploy:
-  extends: .deploy
-  dependencies:
-    - build
+job1:
+  script:
+    - curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
+    - export PATH=$PATH:~/yandex-cloud/bin
+    - yc -v
+    - yc config set compute-default-zone ru-central1-b
+    - yc --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID compute instance list
+    - mkdir -p cache
+    - "[ -f $SSH_KEY ] || ssh-keygen -b 2048 -t rsa -f $SSH_KEY -q -N \"\""
+    - >
+     yc 
+     --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
+     compute instance create 
+     --name first-instance 
+     --zone ru-central1-a 
+     --public-ip 
+     --create-boot-disk size=20G,image-folder-id=standard-images,image-family=centos-8 
+     --preemptible 
+     --core-fraction 20 
+     --memory 6 
+     --ssh-key $SSH_KEY 
+    - >
+     yc 
+     --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
+     compute instance list
+    - >
+     yc 
+     --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
+     compute instance get first-instance
+  artifacts:
+    paths:
+      - cache/sshkey
+      - cache/sshkey.pub
+    expire_in: 1 week
