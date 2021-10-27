@@ -12,13 +12,20 @@ stages:
 newvm:
   stage: newvm
   script:
+    # download Yandex Cloud CLI
     - curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
     - export PATH=$PATH:~/yandex-cloud/bin
+    # check version
     - yc -v
+    # no really need here
     - yc config set compute-default-zone ru-central1-b
+    # show exists compute instances
     - yc --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID compute instance list
+    # (re)create cached dir - will be persistant between run
     - mkdir -p cache
+    # generate new key pair if not exist
     - "[ -f $SSH_KEY ] || ssh-keygen -b 2048 -t rsa -f $SSH_KEY -q -N \"\""
+    # create Yandex.Cloud compute instance
     - >
      yc 
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
@@ -31,15 +38,19 @@ newvm:
      --core-fraction 20 
      --memory 6 
      --ssh-key $SSH_KEY.pub 
+    # check updated list of instances 
     - >
      yc 
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
      compute instance list
+    # print new vm config to file
     - >
      yc 
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
      compute instance get first-instance > cache/vmconfig.txt
-     - cat cache/vmconfig.txt | grep -v "address: 10"  | grep " address:" | tr -d ' address:' > cache/addr
+    - "cat cache/vmconfig.txt | grep -v 'address: 10'  | grep ' address:' | tr -d ' address:' > cache/addr"
+    # wait until vm become online
+    - sleep 30
   artifacts:
     paths:
       - cache/sshkey
