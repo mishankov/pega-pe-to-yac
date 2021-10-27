@@ -38,15 +38,18 @@ newvm:
     - >
      yc 
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
-     compute instance get first-instance | grep -v "address: 10"  | grep " address:" | tr -d ' address:' > cache/addr
+     compute instance get first-instance > cache/vmconfig.txt
+     - cat cache/vmconfig.txt | grep -v "address: 10"  | grep " address:" | tr -d ' address:' > cache/addr
   artifacts:
     paths:
       - cache/sshkey
       - cache/sshkey.pub
+      - cache/vmconfig.txt
+      - cache/addr
     expire_in: 1 week
   rules:
-    #- when: always
-    - when: never
+    - when: always
+    #- when: never
 
 vmconfig:
   stage: vmconfig
@@ -59,5 +62,6 @@ vmconfig:
     - chmod 700 ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
     - "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null tomcat.service yc-user@`cat cache/addr`:"
-    #- ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@62.84.119.228  < db-install.sh
+    - "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null context.xml yc-user@`cat cache/addr`:"
+    - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@62.84.119.228  < db-install.sh
     - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < tomcat-install.sh
