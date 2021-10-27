@@ -59,8 +59,8 @@ newvm:
       - cache/addr
     expire_in: 1 week
   rules:
-    - when: always
-    #- when: never
+    #- when: always
+    - when: never
 
 vmconfig:
   stage: vmconfig
