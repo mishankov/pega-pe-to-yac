@@ -86,7 +86,6 @@ vmconfig:
     - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < upload.sh
     - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < db-install.sh
     - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < tomcat-install.sh
-    - echo "Started at: http:\\\\"`cat cache/addr`":8080\\prweb"
   rules:
     - when: always
     - when: never    
