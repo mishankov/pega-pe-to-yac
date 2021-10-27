@@ -74,10 +74,10 @@ vmconfig:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
     - "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null tomcat.service yc-user@`cat cache/addr`:"
     - "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null context.xml yc-user@`cat cache/addr`:"
-    - echo './dl-cloud-mail-ru.sh $LINK_PG postgresql-42.0.0.jar' > upload.sh
-    - echo './dl-cloud-mail-ru.sh $LINK_HELP prhelp.war' >> upload.sh
-    - echo './dl-cloud-mail-ru.sh $LINK_WEB prweb.war' >> upload.sh
-    - echo 'exit' >> upload.sh
+    - echo ./dl-cloud-mail-ru.sh $LINK_PG postgresql-42.0.0.jar > upload.sh
+    - echo ./dl-cloud-mail-ru.sh $LINK_HELP prhelp.war >> upload.sh
+    - echo ./dl-cloud-mail-ru.sh $LINK_WEB prweb.war >> upload.sh
+    - echo exit >> upload.sh
     - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < before.sh
     - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < upload.sh
     - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < db-install.sh
