@@ -8,6 +8,7 @@ sudo tar xvf apache-tomcat-*tar.gz -C /opt/tomcat --strip-components=1
 sudo cp -f context.xml /opt/tomcat/conf/context.xml
 sudo cp -f postgresql-42.0.0.jar /opt/tomcat/lib/postgresql-42.0.0.jar
 sudo cp prhelp.war /opt/tomcat/webapps
+sudo cp prweb.war /opt/tomcat/webapps
 
 echo TODO copy WAR-s here!!!!
 
