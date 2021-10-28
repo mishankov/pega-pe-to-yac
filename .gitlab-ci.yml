@@ -59,7 +59,7 @@ newvm:
       - cache/addr
     expire_in: 1 week
   rules:
-    - when: always
+    - when: manual
     - when: never
 
 vmconfig:
@@ -87,5 +87,5 @@ vmconfig:
     - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < db-install.sh
     - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < tomcat-install.sh
   rules:
-    - when: always
+    - when: manual
     - when: never    
