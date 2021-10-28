@@ -1,91 +1,60 @@
 # PegPE on YandexCloud
 
+В этом репозитории реализован пайплайн для автоматизации создания виртуалки в Yandex Compute Cloud и запуске на ней Pega PE.
 
+## Как воспользоваться
+Сделать форк, настроить переменные, запустить
 
-## Getting started
+### переменные
+| Переменная   | Описание                                                      |
+|--------------|---------------------------------------------------------------|
+| LINK_DUMP1   | Ссылка на первую половину дампа                               |
+| LINK_DUMP2   | Ссылка на вторую половину дампа                               |
+| LINK_DUMP3   | Ссылка на файл - контрольную сумму (пока что не используется) |
+| LINK_HELP    | Ссылка на prhelp.war                                          |
+| LINK_PG      | Ссылка на JDBC драйвер Postgres                               |
+| LINK_WEB     | Ссылка на prweb.war                                           |
+| YC_CLOUD_ID  | идентификатор облака                                          |
+| YC_FOLDER_ID | идентификатор папки облака                                    |
+| YC_TOKEN     | токен доступа                                                 |
+| YC_ZONE      | название зоны размещения                                      |
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Все ссылки подразумеваются ссылками на облако mail.ru (полученные через встроенный механизм шаринга по ссылке).
+Про параметры подключения к Yandex Cloud можно почитать тут https://cloud.yandex.ru/docs/compute/quickstart/quick-create-linux.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Как работает
 
-## Add your files
+При каждом запуске пайплайна, а точнее каждого из его стейджей запускается докер docker контейнер, на котором происходит выполнение.
 
-- [ ] [Create](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Пайплайн содержит два стейджа
+* **newvm** - создание виртуалки
+* **vmconfig** - настройка созданной виртуалки.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/ognivo777/pegpe-on-yandexcloud.git
-git branch -M main
-git push -uf origin main
-```
+Для удобства объявлен кеш в папке cache. Это позволяет передавать между стейджамии промежуточные данные, а так же упростить отладку, за счёт однократной генерации SSH ключей.
 
-## Integrate with your tools
+Подробнее о каждом:
+### newvm
+1. Происходит установка адаптированного к работе в рамках CI/CD клиента **yc** для управления Yandex Cloud.
+1. Создание кеша и генерация SSH ключей, в случае если их ещё нет.
+1. Создание виртуалки
+1. Получение информации из виртуалке и в частности сохранение её  ip адреса для дальнейших шагов.
+1. Експорт сгенерированных ключей и IP адреса в виде артифакта сборки.
 
-- [ ] [Set up project integrations](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/user/project/integrations/)
+### vmconfig
+1. Запуск агента SSH ключей и импорт в него ранее сгенерированного ключа.
+1. Перенос на виртуалку файлов конфигурации базы, томката.
+1. Динамическое создание скрипта запуска скачивания ресурсов по ссылкам из параметров.
+1. Запуск на виртуалке скриптов:
+    1. **before.sh** установка утилиты для скачивания файлов с облака mail.ru.
+    1. **download.sh** запуск скачивания.
+    1. **db-install.sh** установка и настройка бд, импорт скачанного дампа.
+    1. **tomcat-install.sh** установка и настройка Tomcat, деплой и запуск приложения
 
-## Collaborate with your team
+## Что можно улучшить
 
-- [ ] [Invite team members and collaborators](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Automatically merge when pipeline succeeds](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://docs.gitlab.com/ee/user/clusters/agent/)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://gitlab.com/-/experiment/new_project_readme_content:350e9300b23f9184d31dbd1efeffc210?https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+* Сильно расширить параметризирование. Например вынести в парамеры конфигурацию виртуалки (память, проц, диск), пароль пользователя БД.
+* Добавить настройку пользователя-администратора tomcat.
+* Добавить систему просмотра логов в браузере.
+* Подумать о возможности подключения какого либо провайдера dynamic dns.
+* Добавить настройку java процедур в БД (PR_READ_FROM_STREAM)
 
