@@ -1,6 +1,6 @@
 sudo dnf -y install java-11-openjdk-headless
 
-wget http://dlcdn.apache.org/tomcat/tomcat-8/v8.5.72/bin/apache-tomcat-8.5.72.tar.gz
+wget http://dlcdn.apache.org/tomcat/tomcat-8/v8.5.75/bin/apache-tomcat-8.5.75.tar.gz
 
 sudo mkdir /opt/tomcat
 sudo mkdir /opt/pegatemp
