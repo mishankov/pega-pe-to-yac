@@ -33,10 +33,10 @@ newvm:
      --name first-instance 
      --zone ru-central1-a 
      --public-ip 
-     --create-boot-disk size=20G,image-folder-id=standard-images,image-family=centos-8 
+     --create-boot-disk size=30G,image-folder-id=standard-images,image-family=centos-8 
      --preemptible 
-     --core-fraction 20 
-     --memory 6 
+     --core-fraction 50 
+     --memory 8 
      --ssh-key $SSH_KEY.pub 
     # check updated list of instances 
     - >
