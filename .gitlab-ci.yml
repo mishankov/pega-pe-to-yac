@@ -31,7 +31,7 @@ newvm:
      --token $YC_TOKEN --cloud-id $YC_CLOUD_ID --folder-id $YC_FOLDER_ID 
      compute instance create 
      --name first-instance 
-     --zone ru-central1-b 
+     --zone ru-central1-a 
      --public-ip 
      --create-boot-disk size=30G,image-folder-id=standard-images,image-family=centos-8 
      --preemptible 
