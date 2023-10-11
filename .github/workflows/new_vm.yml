@@ -30,4 +30,35 @@ jobs:
         run: ~/yandex-cloud/bin/yc --token ${{ secrets.YC_TOKEN }} --cloud-id ${{ secrets.YC_CLOUD_ID }} --folder-id ${{ secrets.YC_FOLDER_ID }} compute instance list
 
       - name: Create cache dir
-        run: mkdir cache
+        run: mkdir -p cache
+
+      - name: Generate new key pair if not exist
+        run: "[ -f $SSH_KEY ] || ssh-keygen -b 2048 -t rsa -f $SSH_KEY -q -N \"\""
+
+      - name: Create Yandex.Cloud compute instance
+        run: |
+          >
+          ~/yandex-cloud/bin/yc
+            --token ${{ secrets.YC_TOKEN }} --cloud-id ${{ secrets.YC_CLOUD_ID }} --folder-id ${{ secrets.YC_FOLDER_ID }} 
+            compute instance create 
+            --name first-instance 
+            --zone ru-central1-a 
+            --public-ip 
+            --create-boot-disk size=30G,image-folder-id=standard-images,image-family=centos-stream-8 
+            --preemptible 
+            --core-fraction 50 
+            --memory 8 
+            --ssh-key $SSH_KEY.pub
+      
+      - name: Show existing compute instances again
+        run: ~/yandex-cloud/bin/yc --token ${{ secrets.YC_TOKEN }} --cloud-id ${{ secrets.YC_CLOUD_ID }} --folder-id ${{ secrets.YC_FOLDER_ID }} compute instance list
+      
+      - name: Print new vm config to file
+        run: |
+          >
+          ~/yandex-cloud/bin/yc
+            --token ${{ secrets.YC_TOKEN }} --cloud-id ${{ secrets.YC_CLOUD_ID }} --folder-id ${{ secrets.YC_FOLDER_ID }}
+            compute instance get first-instance > cache/vmconfig.txt
+        
+      - name: Save address to cache
+        run: "cat cache/vmconfig.txt | grep -v 'address: 10'  | grep ' address:' | tr -d ' address:' > cache/addr"
