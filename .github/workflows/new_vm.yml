@@ -13,11 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Restore cache
-        uses: actions/cache/restore@v3
-        with:
-          path: cache
-          key: new-vm-cache
+      # - name: Restore cache
+      #   uses: actions/cache/restore@v3
+      #   with:
+      #     path: cache
+      #     key: new-vm-cache
 
       - name: Download Yandex Cloud CLI
         run: |
@@ -62,11 +62,11 @@ jobs:
       - name: Save address to cache
         run: "cat cache/vmconfig.txt | grep -v 'address: 10'  | grep ' address:' | tr -d ' address:' > cache/addr"
       
-      - name: Save cache
-        uses: actions/cache/save@v3
-        with:
-          path: cache
-          key: new-vm-cache
+      # - name: Save cache
+      #   uses: actions/cache/save@v3
+      #   with:
+      #     path: cache
+      #     key: new-vm-cache
       
       - name: Upload cache to artifacts
         uses: actions/upload-artifact@v3
