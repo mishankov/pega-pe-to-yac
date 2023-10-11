@@ -7,7 +7,7 @@ env:
   SSH_KEY: cache/sshkey
 
 jobs:
-  build:
+  new-vm:
     runs-on: ubuntu-latest
 
     steps:
@@ -74,3 +74,16 @@ jobs:
           name: new-vm-cache
           path: cache
           retention-days: 1
+
+  configure-vm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Upload cache to artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: new-vm-cache
+
+      - run: ls -la
