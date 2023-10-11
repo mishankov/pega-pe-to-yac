@@ -21,8 +21,6 @@ jobs:
       - name: Download Yandex Cloud CLI
         run: |
           curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
-          export PATH=$PATH:~/yandex-cloud/bin
-          source "/home/runner/.bashrc"
       
-      - name: Download Yandex Cloud CLI
-        run: yc -v
+      - name: Check version
+        run: ~/yandex-cloud/bin/yc -v
