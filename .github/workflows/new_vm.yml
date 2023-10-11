@@ -88,4 +88,4 @@ jobs:
           name: new-vm-cache
           path: cache
 
-      - run: ls -la
+      - run: ls -R
