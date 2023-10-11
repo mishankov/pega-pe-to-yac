@@ -71,6 +71,6 @@ jobs:
       - name: Upload cache to artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: new_
-          path: dist/web-tail-linux
-          retention-days: 5
+          name: new-vm-cache
+          path: cache
+          retention-days: 1
