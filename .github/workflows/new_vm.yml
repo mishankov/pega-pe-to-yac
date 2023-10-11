@@ -86,5 +86,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: new-vm-cache
+          path: cache
 
       - run: ls -la
