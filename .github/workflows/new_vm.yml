@@ -24,4 +24,4 @@ jobs:
           source "/home/runner/.bashrc"
       
       - name: Check version
-        run: yc -v
+        run: ~/yandex-cloud/bin/yc -v
