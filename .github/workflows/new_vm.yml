@@ -33,7 +33,8 @@ jobs:
         run: mkdir -p cache
 
       - name: Generate new key pair if not exist
-        run: "[ -f $SSH_KEY ] || ssh-keygen -b 2048 -t rsa -f $SSH_KEY -q -N \"\""
+        # run: "[ -f $SSH_KEY ] || ssh-keygen -b 2048 -t rsa -f $SSH_KEY -q -N \"\""
+        run: "ssh-keygen -b 2048 -t rsa -f ssh_key -q -N \"\""
 
       - name: Create Yandex.Cloud compute instance
         run: |
@@ -47,7 +48,7 @@ jobs:
             --preemptible \
             --core-fraction 50 \
             --memory 8 \
-            --ssh-key $SSH_KEY.pub
+            --ssh-key $ssh_key.pub
       
       - name: Show existing compute instances again
         run: ~/yandex-cloud/bin/yc --token ${{ secrets.YC_TOKEN }} --cloud-id ${{ secrets.YC_CLOUD_ID }} --folder-id ${{ secrets.YC_FOLDER_ID }} compute instance list
