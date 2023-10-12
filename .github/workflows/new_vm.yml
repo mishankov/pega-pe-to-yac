@@ -82,7 +82,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Upload cache to artifacts
+      - name: Download cache from artifacts
         uses: actions/download-artifact@v3
         with:
           name: new-vm-cache
