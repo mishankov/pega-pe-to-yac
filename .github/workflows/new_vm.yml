@@ -20,9 +20,7 @@ jobs:
       #     key: new-vm-cache
 
       - name: Download Yandex Cloud CLI
-        run: |
-          curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
-          source "/home/runner/.bashrc"
+        run: curl https://raw.githubusercontent.com/Jokero/yandex-cloud-cli-install-for-ci/master/install.sh | bash
       
       - name: Check version
         run: ~/yandex-cloud/bin/yc -v
