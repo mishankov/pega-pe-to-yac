@@ -97,7 +97,7 @@ jobs:
       
       - run: ls -R
       - run: cat cache/addr
-      - run: echo "cat cache/addr" >> "$REMOTE_ADDR"
+      - run: "REMOTE_ADDR=$(cat cache/addr)" >> "$GITHUB_ENV"
 
       - name: copy file via scp
         uses: appleboy/scp-action@v0.1.4
