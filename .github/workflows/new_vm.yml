@@ -95,7 +95,8 @@ jobs:
       # - run: chmod 700 ~/.ssh
       # - run: '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
       
-      - run: cat cache/addr >> "$REMOTE_ADDR"
+      - run: ls -R
+      - run: echo "cat cache/addr" >> "$REMOTE_ADDR"
 
       - name: copy file via scp
         uses: appleboy/scp-action@v0.1.4
