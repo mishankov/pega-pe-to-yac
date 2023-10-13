@@ -90,6 +90,7 @@ jobs:
       - run: uname -a
       - run: eval $(ssh-agent -s)
       - run: 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+      - run: eval `ssh-agent -s`
       - run: cat $SSH_KEY | tr -d '\r' | ssh-add -
       - run: mkdir -p ~/.ssh
       - run: chmod 700 ~/.ssh
