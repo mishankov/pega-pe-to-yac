@@ -96,6 +96,7 @@ jobs:
       # - run: '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
       
       - run: ls -R
+      - run: cat cache/addr
       - run: echo "cat cache/addr" >> "$REMOTE_ADDR"
 
       - name: copy file via scp
