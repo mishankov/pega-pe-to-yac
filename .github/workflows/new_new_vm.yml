@@ -79,7 +79,8 @@ jobs:
       # - run: eval $(ssh-agent -s)
       # - run: exec ssh-agent bash
       - run: eval `ssh-agent -s`
-      - run: cat $SSH_KEY | tr -d '\r' | ssh-add -
+      # - run: cat $SSH_KEY | tr -d '\r' | ssh-add -
+      - run: ssh-add cache/sshkey
       # - run: mkdir -p ~/.ssh
       # - run: chmod 700 ~/.ssh
       # - run: '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
