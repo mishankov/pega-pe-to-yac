@@ -5,7 +5,7 @@ on:
 
 env:
   SSH_KEY: cache/sshkey
-  INSTANCE_NAME: first-instance
+  INSTANCE_NAME: pega
 
 jobs:
   new-vm:
