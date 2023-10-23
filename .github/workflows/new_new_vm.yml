@@ -77,8 +77,9 @@ jobs:
       - run: uname -a
       - run: 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
       # - run: eval $(ssh-agent -s)
-      - run: exec ssh-agent bash
-      # - run: cat $SSH_KEY | tr -d '\r' | ssh-add -
+      # - run: exec ssh-agent bash
+      - run: eval `ssh-agent -s`
+      - run: cat $SSH_KEY | tr -d '\r' | ssh-add -
       # - run: mkdir -p ~/.ssh
       # - run: chmod 700 ~/.ssh
       # - run: '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
