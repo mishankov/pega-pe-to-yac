@@ -78,7 +78,8 @@ jobs:
       - run: 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
       # - run: eval $(ssh-agent -s)
       # - run: exec ssh-agent bash
-      - run: eval `ssh-agent -s`
+      # - run: eval `ssh-agent -s`
+      - run: ssh-agent /bin/sh
       # - run: cat $SSH_KEY | tr -d '\r' | ssh-add -
       - run: ssh-add cache/sshkey
       # - run: mkdir -p ~/.ssh
