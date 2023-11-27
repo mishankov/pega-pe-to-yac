@@ -101,9 +101,9 @@ jobs:
       #     host: $REMOTE_ADDR
       #     script: whoami
       - run: chmod 600 $SSH_KEY
-      - run: "scp -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null tomcat.service yc-user@`cat cache/addr`:"
-      - run: "scp -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null context.xml yc-user@`cat cache/addr`:"
-      - run: "scp -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pg_hba.conf yc-user@`cat cache/addr`:"
+      - run: "scp -i $SSH_KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null tomcat.service yc-user@`cat cache/addr`:"
+      - run: "scp -i $SSH_KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null context.xml yc-user@`cat cache/addr`:"
+      - run: "scp -i $SSH_KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pg_hba.conf yc-user@`cat cache/addr`:"
       - run: echo ./dl-cloud-mail-ru.sh $LINK_PG postgresql-42.0.0.jar > download.sh
       - run: echo ./dl-cloud-mail-ru.sh $LINK_HELP prhelp.war >> download.sh
       - run: echo ./dl-cloud-mail-ru.sh $LINK_WEB prweb.war >> download.sh
@@ -111,7 +111,7 @@ jobs:
       - run: echo ./dl-cloud-mail-ru.sh $LINK_DUMP2 pega.002 >> download.sh
       - run: echo ./dl-cloud-mail-ru.sh $LINK_DUMP3 pega.crc >> download.sh
       - run: echo exit >> download.sh
-      - run: ssh -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < before.sh
-      - run: ssh -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < download.sh
-      - run: ssh -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < db-install.sh
-      - run: ssh -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < tomcat-install.sh
+      - run: ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < before.sh
+      - run: ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < download.sh
+      - run: ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < db-install.sh
+      - run: ssh -i $SSH_KEY -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -t -t yc-user@`cat cache/addr` < tomcat-install.sh
