@@ -33,7 +33,7 @@ jobs:
         run: mkdir -p cache
 
       - name: Generate new key pair if not exist
-        run: "[ -f $SSH_KEY ] || ssh-keygen -b 2048 -t rsa -f $SSH_KEY -q -N \"\""
+        run: "[ ssh-keygen -b 2048 -t rsa -q -N \"\""
 
       - name: Create Yandex.Cloud compute instance
         run: |
@@ -74,14 +74,14 @@ jobs:
           path: cache
           retention-days: 1
 
-      - run: uname -a
-      - run: 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+      # - run: uname -a
+      # - run: 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
       # - run: eval $(ssh-agent -s)
       # - run: exec ssh-agent bash
       # - run: eval `ssh-agent -s`
-      - run: ssh-agent /bin/sh
+      # - run: ssh-agent /bin/sh
       # - run: cat $SSH_KEY | tr -d '\r' | ssh-add -
-      - run: ssh-add cache/sshkey
+      # - run: ssh-add cache/sshkey
       # - run: mkdir -p ~/.ssh
       # - run: chmod 700 ~/.ssh
       # - run: '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> ~/.ssh/config'
@@ -101,9 +101,9 @@ jobs:
       #     host: $REMOTE_ADDR
       #     script: whoami
       
-      - run: "scp -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null tomcat.service yc-user@`cat cache/addr`:"
-      - run: "scp -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null context.xml yc-user@`cat cache/addr`:"
-      - run: "scp -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pg_hba.conf yc-user@`cat cache/addr`:"
+      - run: "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null tomcat.service yc-user@`cat cache/addr`:"
+      - run: "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null context.xml yc-user@`cat cache/addr`:"
+      - run: "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pg_hba.conf yc-user@`cat cache/addr`:"
       - run: echo ./dl-cloud-mail-ru.sh $LINK_PG postgresql-42.0.0.jar > download.sh
       - run: echo ./dl-cloud-mail-ru.sh $LINK_HELP prhelp.war >> download.sh
       - run: echo ./dl-cloud-mail-ru.sh $LINK_WEB prweb.war >> download.sh
