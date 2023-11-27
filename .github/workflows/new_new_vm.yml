@@ -100,7 +100,7 @@ jobs:
       #   with:
       #     host: $REMOTE_ADDR
       #     script: whoami
-      
+      - run: chmod 600 $SSH_KEY
       - run: "scp -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null tomcat.service yc-user@`cat cache/addr`:"
       - run: "scp -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null context.xml yc-user@`cat cache/addr`:"
       - run: "scp -i $SSH_KEY.pub -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pg_hba.conf yc-user@`cat cache/addr`:"
